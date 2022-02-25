@@ -1,0 +1,5 @@
+# ninja log v5
+3	1456	6675319268323240	CMakeFiles/OSY1.dir/main.cpp.obj	9757f0b4f5997eed
+0	370	6675319647946403	build.ninja	6d555884020eef8f
+0	1143	6675318200609390	CMakeFiles/OSY1.dir/sample_tester.cpp.obj	3206aa3f1b32fa4c
+1	260	6675319647946403	build.ninja	6d555884020eef8f

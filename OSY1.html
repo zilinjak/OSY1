@@ -1,0 +1,921 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml-transitional.dtd">
+<!-- saved from url=(0071)https://progtest.fit.cvut.cz/index.php?X=Task&Cou=323&Tgr=2049&Tsk=1683 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>zilinjak@progtest.fit.cvut.cz - ProgTest</title>
+  
+  <link href="./OSY1_files/css.css" rel="stylesheet" type="text/css">
+  <script src="./OSY1_files/shared.js.stažený soubor" language="JavaScript" type="text/javascript"></script>
+  
+ </head>
+ <body bgcolor="#828273" text="#000000">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+   <tbody><tr height="25">
+    <td align="left" bgcolor="#00ff00"><span class="navLink"><a class="navLink" href="https://progtest.fit.cvut.cz/index.php?X=Main">ProgTest</a>&nbsp;&nbsp;►&nbsp;&nbsp;<a class="navLink" href="https://progtest.fit.cvut.cz/index.php?X=Course&amp;Cou=323">BI-OSY (20/21 LS)</a>&nbsp;&nbsp;►&nbsp;&nbsp;<a class="navLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskGrp&amp;Cou=323&amp;Tgr=2049">Úloha #1</a>&nbsp;&nbsp;►&nbsp;&nbsp;<b>Optimalizace nákladu</b></span></td>
+    <td align="right" bgcolor="#00ff00"><a class="navLink" href="https://progtest.fit.cvut.cz/index.php?X=Logout">Logout</a></td>
+   </tr>
+  </tbody></table>
+<br>
+
+
+
+
+ <br>
+ <br>
+   <center>
+   <div class="topLayout">
+    <div class="outBox">
+     <table class="header" width="100%" cellpadding="0" cellspacing="0">
+      <tbody><tr>
+       <td class="header"><b>Optimalizace nákladu</b></td>
+      </tr>
+     </tbody></table>
+    </div>
+   </div>
+  </center>
+ <form name="form1" method="post" action="https://progtest.fit.cvut.cz/index.php?X=TaskU&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683" enctype="multipart/form-data">
+  <center>
+    <div class="topLayout">
+     <div class="outBox">
+      <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+       <colgroup><col width="200">
+       <col>
+       <col width="130">
+
+       </colgroup><tbody><tr>
+        <td class="ltCell" align="left"><b>Termín odevzdání:</b></td>
+        <td class="tCell" align="left"><b>05.04.2021 23:59:59</b></td>
+        <td class="rtCell" align="right" id="countdown">&nbsp;</td>
+       </tr>
+
+       <tr>
+        <td class="lCell" align="left"><b>Hodnocení:</b></td>
+        <td class="rCell" colspan="2" align="left"><b>33.0000</b></td>
+       </tr>
+       <tr>
+        <td class="lCell" align="left"><b>Max. hodnocení:</b></td>
+        <td class="rCell" colspan="2" align="left"><b>30.0000</b> (bez bonusů)</td>
+       </tr>
+       <tr>
+        <td class="lCell" align="left"><b>Odevzdaná řešení:</b></td>
+        <td class="rCell" colspan="2" align="left">5 /  75</td>
+       </tr>
+
+       <tr>
+        <td class="lbCell" align="left"><b>Nápovědy:</b></td>
+        <td class="rbCell" colspan="2" align="left">0 / 0</td>
+       </tr>
+
+       <tr>
+        <td class="lrtbCell" colspan="3" align="left"><p>Úkolem je realizovat sadu tříd, která budou optimalizovat zisk za přepravu zboží na lodích.</p>
+
+<p>Předpokládáme, že máme k dispozici lodě schopné přepravovat zboží. Každá loď má definovanou 
+maximální nosnost (maxWeight) a maximální objem přepravovaného zboží (maxVolume). Ani jeden z těchto 
+limitů nelze při nakládání překročit. Loď má jednoznačně určený cíl (destination), jedná se o textový 
+řetězec.</p>
+
+<p>V úloze dále vystupují zákazníci. Ti na základě nabídky cíle definují seznam zboží, které má být do 
+zadaného cíle přepraveno. Seznam zboží může mít libovolnou délku (0, 1, 2, ..., N položek), u každého 
+zboží na seznamu je zadaná jeho hmotnost, objem a nabízená cena za přepravu.</p>
+
+<p>Implementovaná třída <tt>CCargoPlanner</tt> bude poptávat registrované zákazníky, vyžádá si od nich 
+seznam zboží k přepravě a určí, jak naplnit lodě zbožím tak, aby byl zisk za přepravu co nejvyšší. Při 
+výpočtu tedy vybere podmnožinu zboží ze seznamů, které dodali zákazníci. Při výběru lze zboží (jednu 
+položku na seznamu) buď naložit celou, nebo vůbec. Například pokud je poptávána přeprava zboží s hmotností 
+100, objemem 50 a cenou 1000, pak lze buď celé toto zboží naložit (a vyhradit patřičné kapacity lodi) nebo 
+jej nenakládat vůbec. Zboží nelze dále dělit (například naložit hmotnost 50, objem 25 za cenu 500). Protože 
+se jedná o výpočetně náročnou úlohu, bude implementace používat vlákna pro urychlení výpočtů a pro správnou 
+komunikaci se zákazníky.</p>
+
+<p>Vytvořená instance <tt>CCargoPlanner</tt> dostane předepsaný počet vláken pro výpočty (<tt>workThreads</tt>) 
+a počet vláken pro obchodníky (<tt>salesThreads</tt>). Dále bude reagovat na asynchronní volání, která ji 
+informují o lodích, které je potřeba naložit. Instance <tt>CCargoPlanner</tt> bude používána takto:</p>
+<ul>
+ <li>vytvoří se instance <tt>CCargoPlanner</tt>,</li>
+ <li>zaregistrují se zákazníci (voláním metody <tt>Customer</tt>),</li>
+ <li>spustí se vlastní výpočet (voláním metody <tt>Start</tt>). Metoda <tt>Start</tt> dostane v parametrech 
+   počet vláken pro obchodníky (<tt>salesThreads</tt>) a počet výpočetních vláken (<tt>workThreads</tt>). Tato 
+   vlákna vytvoří a nechá je čekat na příchozí požadavky. Po vytvoření vláken se <tt>Start</tt> vrátí 
+   do volajícího,</li>
+ <li>testovací prostředí bude opakovaným voláním metody <tt>Ship</tt> zadávat lodě, které je potřeba naložit. 
+   Metoda <tt>Ship</tt> může být volaná z hlavního vlákna, případně i z dalších jiných vláken testovacího 
+   prostředí. Předpokládá se, že zavolání metody <tt>Ship</tt> je velmi rychlé, volaný si pouze převezme 
+   informaci o lodi a zajistí její naložení pomocí vláken obchodníků a pracovních vláken,</li>
+ <li>po zadání poslední lodě testovací prostředí zavolá metodu <tt>Stop</tt>. Tímto voláním dává najevo, 
+   že již nebude zadávat další lodě. <tt>CCargoPlanner</tt> zajistí naplnění dosud předaných lodí a ukončení 
+   všech vytvořených vláken (vlákna obchodníků i pracovní vlákna). Po doběhnutí všech těchto vláken se 
+   <tt>Stop</tt> vrátí do volaného,</li>
+ <li>je uvolněna instance <tt>CCargoPlanner</tt>.</li>
+</ul>
+
+Použité třídy a jejich rozhraní:
+<ul>
+  <li><tt>CCargo</tt> je třída reprezentující jeden kus přepravovaného zboží. Jedná se o velmi jednoduchou 
+    třídu, která zapouzdřuje hmotnost, objem a poplatek za přepravu pro toto zboží.</li>
+    
+  <li><tt>CShip</tt> je třída reprezentující společné rozhraní lodí k naložení (nakládané lodě budou potomci 
+    této základní třídy). Loď ukládá informaci o své kapacitě (<tt>m_MaxWeight</tt> a <tt>m_MaxVolume</tt>) a 
+    cíli své cesty (<tt>m_Destination</tt>). Tyto atributy jsou vyplněné v konstruktoru. Dále jsou k dispozici 
+    metody: 
+    <ul>
+      <li><tt>Destination</tt> pro zjištění cíle cesty. Můžete se spolehnout, že každá 
+        nakládaná loď bude mít jiný cíl své cesty,</li>
+      <li><tt>MaxWeight</tt> pro zjištění maximální nosnosti lodě,</li>
+      <li><tt>MaxVolume</tt> pro zjištění maximálního objemu lodě,</li>
+      <li><tt>Load</tt> pro naložení vypočteného nákladu. Tuto metodu bude volat výpočetní vlákno, které 
+        nalezne optimální zaplnění lodě. Parametrem volání je seznam nákladu, který má být naložen 
+        (<tt>vector&lt;CCargo&gt;</tt>). Pořadí nákladu ve vektoru nehraje roli. Pokud existuje více 
+        stejně dobrých řešení, lze zvolit libovolné z nich.</li>
+    </ul>
+  </li>  
+
+  <li><tt>CCustomer</tt> je třída reprezentující společné rozhraní zákazníků (skuteční zákazníci budou potomci 
+    této základní třídy). V rozhraní zákazníka je důležitá metoda <tt>Quote (dest, cargo) </tt>, která zjistí 
+    požadavky na přepravované zboží do daného cíle. Tuto metodu budou volat vlákna obchodníků poté, co se objeví 
+    nová loď k naložení. Volání této metody může trvat docela dlouho (zákazník se dlouho rozhoduje, co a za kolik 
+    chce dopravovat). Metodu <tt>Quote</tt> jednoho zákazníka může najednou volat více vláken obchodníků, například 
+    pro různé nakládané lodě.</li>
+    
+  <li><tt>CCargoPlanner</tt> je Vámi implementovaná třída, která bude zapouzdřovat požadovanou funkcionalitu zaplňování 
+    lodí. Její veřejné rozhraní musí splňovat:
+    <ul>
+     <li>konstruktor bez parametrů inicializuje novou instanci třídy. Zatím nevytváří žádná vlákna,</li>
+
+     <li>metodu <tt>Customer (x)</tt>, tato metoda zaregistruje zákazníka <tt>x</tt>,</li>
+     
+     <li>metodu <tt>Start ( salesThr, workThr )</tt>, tato metoda vytvoří zadané počty vláken pro obchodníky a výpočty. 
+       Vlákna po vytvoření budou čekat na zadání lodě (lodí) pro odbavení. Volání metody <tt>Start</tt> se ihned po 
+       inicializaci vrátí do volajícího,</li>
+       
+     <li>metodu <tt>Ship (x)</tt>, metoda předá novou instanci lodě <tt>x</tt> k nakládce. Volání metody zařídí předání 
+       lodě vláknům obchodníků a výpočetním vláknům, ale uvnitř metody samotné se nebudou provádět žádné časově náročné 
+       výpočty. Volání <tt>Ship</tt> se tedy prakticky okamžitě vrátí do volajícího,</li>
+     
+     <li>metodu <tt>Stop</tt>, která počká na odbavení předaných lodí, dokončení všech výpočtů a ukončení vytvořených 
+       vláken. Po tomto se volání <tt>Stop</tt> vrátí zpět do volajícího,</li>
+       
+     <li>třídní metodu <tt>SeqSolver(cargo, maxWeight, maxVolume, load)</tt>. Metoda slouží k otestování vlastního algoritmu 
+       nakládání lodě. Parametrem volání je seznam zboží <tt>cargo</tt>, z tohoto seznamu bude náklad vybírán, <tt>maxWeight</tt> 
+       a <tt>maxVolume</tt> udávající kapacitu lodě a <tt>load</tt> - výstupní parametr, do kterého bude umístěno zboží k naložení 
+       (zboží v tomto seznamu nesmí překročit kapacity lodě a musí dávat nejlepší součet poplatků). Návratovou hodnotou metody 
+       je suma poplatků za vybraný náklad.</li>
+    </ul>
+  </li>
+    
+  <li>funkce <tt>ProgtestSolver (cargo, maxWeight, maxVolume, load)</tt> je hotová implementace algoritmu pro výběr zboží k 
+    naložení. Funkce má rozhraní stejné jako třídní metoda <tt>CCargoPlanner::SeqSolver</tt>. Vaše implementace může tuto funkci 
+    použít pro vlastní výpočet, případně tuto funkci nemusíte používat a výpočet si implementovat sami. V posledním (bonusovém) 
+    testu je implementace této funkce v testovacím prostředí úmyslně nefunkční (vrací prázdné seznamy).</li>
+</ul>
+
+<p>Implementace předpokládá vytvoření vláken pro obchodníky a pracovních vláken. Počty těchto vláken jsou zadané ve 
+volání <tt>Start</tt>. Po zadání lodě k naložení (metoda <tt>Ship</tt>) se aktivují vlákna obchodníků. Ze zadané lodi je 
+potřeba získat cíl a poptat všechny registrované zákazníky na jejich seznamy zboží, které chtějí zaslat do tohoto cíle. 
+Vlákna obchodníků proto budou volat metodu <tt>CCustomer::Quote</tt>. Zákazníci mohou na výzvu reagovat rychle (volání 
+<tt>Quote</tt> se okamžitě vrátí), ale jejich odpověď může trvat i velmi dlouho (volání <tt>Quote</tt> je blokující). 
+Je proto třeba zapojit všechna dostupná vlákna obchodníků k obsloužení všech zákazníků / cílů. Zákazník A 
+se na dotazu pro destinaci X může zaseknout na dlouhou dobu (efektivně tedy blokuje příslušné vlákno obchodníka).
+Ale ten samý zákazník může být paralelně dotazován jiným vláknem obchodníka na destinaci Y, kterou zodpoví okamžitě. 
+V implementaci tedy nelze fixně přidělit obchodníkům jejich lodě / zákazníky, vždy je potřeba práci rozdělovat podle 
+aktuální dostupnosti. Jeden z testů je navržen tak, aby fixní přidělování vedlo k deadlocku.</p>
+
+<p>Až pro danou loď sesbíráte požadavky od všech zákazníků, je potřeba z takto získaného seznamu zboží vybrat náklad, 
+který bude na loď fakticky umístěn. Toto je práce pro pracovní vlákna, kterým problém předají vlákna obchodníků. Vlákna 
+obchodníků nebudou provádět vlastní výpočet, nejsou k tomu určena a mají vlastní povinnosti obsluhovat zákazníky. 
+Pracovní vlákna provedou vlastní výpočet (buď pomocí dodané funkce <tt>ProgtestSolver</tt> nebo si výpočet implementujete 
+svůj) a vybraný náklad umístí na loď (<tt>CShip::Load</tt>). Metodu <tt>CShip::Load</tt> musíte pro každou loď 
+zavolat právě jednou.</p>
+
+
+<p>Pokud se rozhodnete pro vlastní implementaci, zohledněte následující:</p>
+<ul>
+ <li>problém se podobá problému balení batohu. Je navíc zkomplikovaný tím, 
+   že musí zohlednit dvě kritéria (hmotnost a objem),</li>
+   
+ <li>problém batohu má rekurzivní řešení, které má exponenciální složitost 
+   vzhledem k počtu zadaných předmětů. V úloze se zadává 1-128 předmětů (zboží), 
+   tedy rekurzivní řešení není časově zvládnutelné,</li>
+   
+ <li>pro řešení se dá použít dynamické programování. Kapacity lodí jsou 
+   rozumně velké (nosnost i objem jsou čísla řádu tisíců), tedy požadavky 
+   na paměť při DP jsou zvládnutelné,</li>
+   
+ <li>i tak je ale potřeba dobrý návrh reprezentace dat, aby výpočet byl 
+   rychlý a případně aby šel paralelizovat (pro poslední bonusový test). 
+   Referenční řešení reprezentuje data pomocí bitových polí, aby se řešení 
+   vešlo do dostupné paměti (cca 1 GiB). Využívá mj. toho, že zboží se 
+   vybírá ze seznam s délkou nejvýše 128 položek.</li>
+</ul>   
+
+<hr>
+
+<p>Odevzdávejte zdrojový kód s implementací požadované třídy
+<tt>CCargoPlanner</tt> s požadovanými metodami. Můžete samozřejmě přidat 
+i další podpůrné třídy a funkce. Do Vaší implementace nevkládejte funkci 
+<tt>main</tt> ani direktivy pro vkládání hlavičkových souborů. Funkci 
+<tt>main</tt> a hlavičkové soubory lze ponechat pouze v případě, že jsou 
+zabalené v bloku podmíněného překladu.</p>
+
+<p>Využijte přiložený ukázkový soubor. Celá implementace patří do souboru 
+<tt>solution.cpp</tt>, dodaný soubor je pouze mustr. Pokud zachováte bloky 
+podmíněného překladu, můžete soubor <tt>solution.cpp</tt> odevzdávat jako 
+řešení úlohy.</p>
+
+<p>Při řešení lze využít pthread nebo C++11 API pro práci s vlákny (viz 
+vložené hlavičkové soubory). Dostupný kompilátor g++ verze 8.3, tato verze 
+kompilátoru zvládá většinu C++11, C++14 a C++17 konstrukcí.</p>
+
+<hr>
+
+<b>Doporučení:</b><br>
+
+<ul>
+ <li>Začněte se rovnou zabývat vlákny a synchronizací, nemusíte se zabývat 
+   vlastními algoritmy řešení zadaných problémů. Využijte dodané řešení - 
+   funkci <tt>ProgtestSolver</tt>. Až budete mít hotovou synchronizaci, 
+   můžete začít s implementací vlastního algoritmického řešení.</li>
+
+ <li>Abyste zapojili co nejvíce jader, obsluhujte co nejvíce lodí a 
+   zákazníků najednou. Je potřeba zároveň přijímat nové lodě, poptávat zákazníky, 
+   řešit zaplnění a vyplňovat nalezená řešení. Nepokoušejte se tyto činnosti 
+   nafázovat (například nejdříve pouze počkat na všechny lodě, pak začít 
+   poptávat zákazníky, ...), takový postup nebude fungovat. Testovací prostředí je 
+   nastaveno tak, aby takové "sekvenční" řešení vedlo k uváznutí (deadlock).</li>
+
+ <li>Instance <tt>CCargoPlanner</tt> je vytvářená opakovaně, pro různé vstupy.
+   Nespoléhejte se na inicializaci globálních proměnných - při druhém a dalším 
+   zavolání budou mít globální proměnné hodnotu jinou. Je rozumné případné globální 
+   proměnné vždy inicializovat v konstruktoru nebo na začátku metody <tt>Start</tt>. 
+   Ještě lepší je nepoužívat globální proměnné vůbec.</li>
+
+ <li>Nepoužívejte mutexy a podmíněné proměnné inicializované pomocí
+   <tt>PTHREAD_MUTEX_INITIALIZER</tt>, důvod je stejný jako v minulém odstavci. 
+   Použijte raději <tt>pthread_mutex_init()</tt> nebo C++11 API.</li>
+
+ <li>Instance zákazníků a lodí alokovalo testovací prostředí při vytváření 
+   příslušných smart pointerů. K uvolnění dojde automaticky po zrušení všech odkazů.
+   Uvolnění těchto instancí tedy není Vaší starostí, stačí zapomenout všechny takto 
+   předané smart pointery. Váš program je ale zodpovědný za uvolnění všech ostatních 
+   prostředků, které si sám alokoval.</li>
+
+ <li>Metoda zákazníka (<tt>CCustomer::Quote</tt>) je reentrantní a thread-safe. 
+   Neobalujte tato volání mutexy, je to zbytečné a zbytečně si tím serializujete 
+   své řešení.</li>
+
+ <li>Neukončujte metodu <tt>Stop</tt> pomocí <tt>exit</tt>,
+   <tt>pthread_exit</tt> a podobných funkcí. Pokud se funkce <tt>Stop</tt> 
+   nevrátí do volajícího, bude Vaše implementace vyhodnocena jako nesprávná.</li>
+
+ <li>Využijte přiložená vzorová data. V archivu jednak naleznete ukázku
+   volání rozhraní a dále několik testovacích vstupů a odpovídajících výsledků.</li>
+
+ <li>V testovacím prostředí je k dispozici STL. Myslete ale na to, že ten samý STL 
+   kontejner nelze najednou zpřístupnit z více vláken. Více si o omezeních přečtěte např. 
+   na <a href="http://en.cppreference.com/w/cpp/container">C++ reference - thread safety.</a></li>
+
+ <li>Testovací prostředí je omezené velikostí paměti. Není uplatňován žádný explicitní limit, ale VM, 
+   ve které testy běží, je omezena 4 GiB celkové dostupné RAM. Úloha může být dost paměťově náročná, 
+   zejména pokud se rozhodnete pro jemné členění úlohy na jednotlivá vlákna. Pokud se rozhodnete pro 
+   takové jemné rozčlenění úlohy, možná budete muset přidat synchronizaci běhu vláken tak, aby celková 
+   potřebná paměť v žádný okamžik nepřesáhla rozumný limit. Pro běh máte garantováno, že Váš program 
+   má k dispozici nejméně 1 GiB pro Vaše data (data segment + stack + heap). Pro zvídavé - zbytek do 
+   4GiB je zabraný běžícím OS, dalšími procesy, zásobníky Vašich vláken a nějakou rezervou.</li>
+
+ <li>Pokud se rozhodnete pro všechny bonusy, je potřeba velmi pečlivě nastavovat granularitu řešeného 
+   problému. Pokud řešený problém rozdělíte na příliš mnoho drobných podproblémů, začne se příliš mnoho 
+   uplatňovat režie. Dále, pokud máte najednou rozpracováno příliš mnoho problémů (a každý je rozdělen 
+   na velké množství podproblémů), začne se výpočet dále zpomalovat (mj. se začnou hůře využívat cache CPU).
+   Aby se tomu zabránilo, řídí referenční řešení počet najednou rozpracovaných úloh (navíc dynamicky 
+   podle velikosti rozpracované úlohy).</li>
+   
+ <li>Výpočetně náročné operace musí provádět pracovní vlákna. Počet
+   pracovních vláken je určen parametrem metody <tt>Start</tt>. Testovací
+   prostředí kontroluje, zda Vaše implementace neprovádí výpočetně náročné
+   operace v ostatních vláknech. Pokud to zjistí, Vaše řešení bude
+   odmítnuto.</li>
+ 
+ <li>Explicitní nastavení počtu pracovních vláken má dobré praktické důvody.
+   Volbou rozumného počtu pracovních vláken můžeme systém zatížit dle naší
+   volby (tedy například podle počtu jader, která můžeme úloze přidělit).
+   Pokud by časově náročné výpočty probíhaly i v jiných vláknech (obsluha
+   zákazníků, příjem asynchronně předaných lodí), pak by bylo možné systém 
+   snadno zahltit.</li>
+   
+</ul>
+
+<hr>
+
+<b>Co znamenají jednotlivé testy:</b><br>
+<dl>
+ <dt><b>Test algoritmu (sekvencni)</b></dt><dd>Testovací prostředí opakovaně
+   volá metody <tt>SeqSolver()</tt> pro různé vstupy a kontroluje 
+   vypočtené výsledky. Slouží pro otestování implementace Vašeho algoritmu. 
+   Není vytvářena instance <tt>CCargoPlanner</tt> a není volaná metoda <tt>Start</tt>. 
+   Na tomto testu můžete ověřit, zda Vaše implementace algoritmu je dostatečně rychlá.
+   Testují se náhodně generované problémy, nejedná se o data z dodané ukázky.</dd>
+
+ <dt><b>Základní test</b></dt><dd>Testovací prostředí vytváří instanci
+   <tt>CCargoPlanner</tt> pro různý počet obchodníků a pracovních vláken. 
+   Ve jménu testu je pak uvedeno, kolik je vláken obchodníků (S=xxx), pracovních 
+   vláken (W=xxx) a zákazníků (C=xxx). 
+   
+ </dd><dt><b>Základní test, prubezna obsluha lodi</b></dt><dd>Test je podobný základnímu 
+   testu, ale kontroluje se průběžné odbavování lodí. Pokud lodě průběžně neodbavujete, 
+   test skončí v deadlocku (efektivně překročí časový limit).
+   
+ </dd><dt><b>Základní test, prubezna obsluha zakazniku</b></dt><dd>Test je podobný základnímu 
+   testu, ale kontroluje se, že dynamicky přidělujete dostupná vlákna obchodníků k obsluze 
+   existujících zákazníků a lodí. Pokud vlákna nepřidělujete správně, test skončí v 
+   deadlocku (efektivně překročí časový limit).
+
+ </dd><dt><b>Test zrychleni vypoctu</b></dt><dd>Testovací prostředí spouští Vaši
+   implementaci pro ta samá vstupní data s různým počtem pracovních vláken. Měří 
+   se čas běhu (wall i CPU). S rostoucím počtem vláken by měl wall time klesat, CPU time 
+   mírně růst (vlákna mají možnost běžet na dalších CPU). Pokud wall time    
+   neklesne, nebo klesne málo (např. pro 2 vlákna by měl ideálně klesnout na 
+   0.5, je ponechaná určitá rezerva), test není splněn.</dd>
+
+ <dt><b>Busy waiting (pomale lode)</b></dt><dd>Nové lodě jsou předávané pomalu. 
+   Výpočetní vlákna ani vlákna obchodníků tím nemají práci. Pokud tato vlákna 
+   nejsou synchronizovaná blokujícím způsobem, výrazně vzroste CPU time a test
+   selže.</dd>      
+
+ <dt><b>Busy waiting (pomali zakaznici)</b></dt><dd>Reakce zákazníků je pomalá, 
+   v <tt>CCustomer::Quote</tt> je vložena prodleva. Výpočetní vlákna ani vlákna 
+   obchodníků tím nemají práci. Pokud tato vlákna nejsou synchronizovaná blokujícím 
+   způsobem, výrazně vzroste CPU time a test selže.</dd>      
+
+ <dt><b>Rozlozeni zateze</b></dt><dd>Testovací prostředí zkouší, zda 
+   se do řešení jednoho problému dokáže zapojit více pracovních vláken. 
+   Pokud chcete v tomto testu uspět, musíte Váš program navrhnout tak, aby 
+   bylo možné využít více vláken i při zpracování jediné instance problému
+   tvořené velkým nákladem a lodí s velkou kapacitou. Jedná se o test bonusový, 
+   nefunguje v něm dodaná funkce <tt>ProgtestSolver</tt> (ostatní dodané 
+   funkce/třídy používat lze). Dodaná implementace <tt>ProgtestSolver</tt> 
+   nedokáže zaměstnat více vláken, v tomto testu by stejně nevyhověla.</dd>
+</dl>
+
+<hr>
+
+<p><b>Update 6.3.2021:</b> zboží, které zázkazníci chtěli přepravit a které není na 
+loď naloženo, můžete zapomenout. Každá loď míří do jiné destinace, tedy zboží nelze 
+naložit na nějakou "další" loď.</p>
+</td>
+       </tr>
+
+
+       <tr>
+        <td class="ltbCell" colspan="2" align="left"><b>Vzorová data:</b></td>
+        <td class="rtbCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskS&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683">Download</a></div></div></td>
+       </tr>
+
+
+
+
+
+
+
+
+
+
+
+      </tbody></table>
+     </div>
+    </div>
+
+
+ <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="reftable">
+   <tbody><tr>
+    <td class="ltbSepCell" align="left"><input type="checkbox" name="SHOW_REF" onchange="showRefSolution()" control-id="ControlID-1">&nbsp;<b>Referenční řešení</b></td>
+    <td class="rtbSepCell" align="right">&nbsp;</td>
+   </tr>
+   <tr style="display: none;">
+    <td class="lrtbCell" align="left" colspan="2"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.040 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.946 s (limit: 20.000 s)</li><li>CPU time: 1.099 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.224 s (limit: 19.054 s)</li><li>CPU time: 0.895 s (limit: 18.901 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.719 s (limit: 18.830 s)</li><li>CPU time: 0.826 s (limit: 18.006 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.712 s (limit: 18.111 s)</li><li>CPU time: 0.831 s (limit: 17.180 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.457 s (limit: 17.399 s)</li><li>CPU time: 2.463 s (limit: 16.349 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k), prubezna obsluha lo': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.300 s (limit: 16.942 s)</li><li>CPU time: 1.593 s (limit: 13.886 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k), prubezna obsluha za': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.420 s (limit: 16.642 s)</li><li>CPU time: 2.301 s (limit: 12.293 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 2.553 s (limit: 16.222 s)</li><li>CPU time: 5.691 s (limit: 9.992 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomale lode)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 3.221 s (limit: 15.000 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomali zakaznici)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 4.282 s (limit: 11.779 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Rozlozeni zateze': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.213 s (limit: 10.000 s)</li><li>CPU time: 0.692 s (limit: 10.000 s)</li><li>Úspěch v bonusovém testu, hodnocení: 130.00 %</li></ul></li>
+<li>Celkové hodnocení: 130.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.30)</li></ul></li><li>Celkové procentní hodnocení: 130.00 %</li><li>Bonus za včasné odevzdání: 3.00</li><li>Celkem bodů: 1.30 * ( 30.00 + 3.00 ) = 42.90</li></ul></td>
+   </tr>
+    <tr style="display: none;">
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>21</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>322</b></td>
+     <td class="ar"><span class="textOk">15.33 ± 14.40</span></td>
+     <td class="ar"><span class="textWarn">58</span></td>
+     <td><tt>CShipment::solveRect</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>65</b></td>
+     <td class="ar"><span class="textOk">3.10 ± 3.13</span></td>
+     <td class="ar"><span class="textOk">13</span></td>
+     <td><tt>CShipment::SolveTile</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>
+   </tbody></table>
+  </div>
+ </div>
+
+
+
+
+ <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+    <colgroup><col width="200">
+    <col>
+    <col width="130">
+
+   </colgroup><tbody><tr>
+    <td class="ltbOkSepCell" align="left"><b>5</b></td>
+    <td class="tbOkSepCell" align="left"><b>05.04.2021 13:33:48</b></td>
+    <td class="rtbOkSepCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskD&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683&amp;Sub=1277038">Download</a></div></div></td>
+   </tr>
+   <tr>
+    <td class="ltCell" align="left"><b>Stav odevzdání:</b></td>
+    <td class="tCell" align="left">Ohodnoceno</td>
+
+
+
+    <td class="rtbCell" rowspan="2">&nbsp;</td>
+
+
+   </tr>
+
+   <tr>
+    <td class="lbCell" align="left"><b>Hodnocení:</b></td>
+    <td class="bCell" align="left">30.0000</td>
+   </tr>   <tr>
+    <td class="lrtbCell" colspan="3" align="left"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.302 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.287 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.103 s (limit: 19.713 s)</li><li>CPU time: 0.307 s (limit: 19.713 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.291 s (limit: 19.610 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.485 s (limit: 19.319 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.266 s (limit: 18.834 s)</li><li>CPU time: 1.007 s (limit: 18.629 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha lodi': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.320 s (limit: 18.568 s)</li><li>CPU time: 1.148 s (limit: 17.622 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha zakazni': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.273 s (limit: 18.248 s)</li><li>CPU time: 1.124 s (limit: 16.474 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 1.265 s (limit: 17.975 s)</li><li>CPU time: 2.581 s (limit: 15.350 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomale lode)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 3.226 s (limit: 15.000 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomali zakaznici)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 4.620 s (limit: 11.774 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Rozlozeni zateze': Neúspěch<ul><li>Dosaženo: 0.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.704 s (limit: 10.000 s)</li><li>Neúspěch v bonusovém testu, hodnocení: Bonus nebude udělen</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li></ul></li>
+<li>Celkové hodnocení: 100.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00)</li></ul></li><li>Celkové procentní hodnocení: 100.00 %</li><li>Celkem bodů: 1.00 * 30.00 = 30.00</li></ul></td>
+   </tr> <tr>
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>9</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>105</b></td>
+     <td class="ar"><span class="textOk">11.67 ± 8.77</span></td>
+     <td class="ar"><span class="textOk">30</span></td>
+     <td><tt>CCargoPlanner::SaleWorker</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>29</b></td>
+     <td class="ar"><span class="textOk">3.22 ± 2.25</span></td>
+     <td class="ar"><span class="textOk">7</span></td>
+     <td><tt>CCargoPlanner::LoadWorker</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>   </tbody></table>
+  </div>
+ </div> <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+    <colgroup><col width="200">
+    <col>
+    <col width="130">
+
+   </colgroup><tbody><tr>
+    <td class="ltbOkSepCell" align="left"><b>4</b></td>
+    <td class="tbOkSepCell" align="left"><b>14.03.2021 17:23:03</b></td>
+    <td class="rtbOkSepCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskD&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683&amp;Sub=1259431">Download</a></div></div></td>
+   </tr>
+   <tr>
+    <td class="ltCell" align="left"><b>Stav odevzdání:</b></td>
+    <td class="tCell" align="left">Ohodnoceno</td>
+
+
+
+    <td class="rtbCell" rowspan="2">&nbsp;</td>
+
+
+   </tr>
+
+   <tr>
+    <td class="lbCell" align="left"><b>Hodnocení:</b></td>
+    <td class="bCell" align="left">33.0000</td>
+   </tr>   <tr>
+    <td class="lrtbCell" colspan="3" align="left"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.144 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.525 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.111 s (limit: 19.475 s)</li><li>CPU time: 0.395 s (limit: 19.475 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.286 s (limit: 19.364 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.468 s (limit: 19.078 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.261 s (limit: 18.610 s)</li><li>CPU time: 1.051 s (limit: 18.326 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha lodi': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.294 s (limit: 18.349 s)</li><li>CPU time: 1.020 s (limit: 17.275 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha zakazni': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.206 s (limit: 18.055 s)</li><li>CPU time: 0.900 s (limit: 16.255 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 1.662 s (limit: 17.849 s)</li><li>CPU time: 3.318 s (limit: 15.355 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomale lode)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 3.224 s (limit: 15.000 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomali zakaznici)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 4.627 s (limit: 11.776 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Rozlozeni zateze': Neúspěch<ul><li>Dosaženo: 0.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.767 s (limit: 10.000 s)</li><li>Neúspěch v bonusovém testu, hodnocení: Bonus nebude udělen</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li></ul></li>
+<li>Celkové hodnocení: 100.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00)</li></ul></li><li>Celkové procentní hodnocení: 100.00 %</li><li>Bonus za včasné odevzdání: 3.00</li><li>Celkem bodů: 1.00 * ( 30.00 + 3.00 ) = 33.00</li></ul></td>
+   </tr> <tr>
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>9</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>105</b></td>
+     <td class="ar"><span class="textOk">11.67 ± 8.77</span></td>
+     <td class="ar"><span class="textOk">30</span></td>
+     <td><tt>CCargoPlanner::SaleWorker</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>29</b></td>
+     <td class="ar"><span class="textOk">3.22 ± 2.25</span></td>
+     <td class="ar"><span class="textOk">7</span></td>
+     <td><tt>CCargoPlanner::LoadWorker</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>   </tbody></table>
+  </div>
+ </div> <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+    <colgroup><col width="200">
+    <col>
+    <col width="130">
+
+   </colgroup><tbody><tr>
+    <td class="ltbOkSepCell" align="left"><b>3</b></td>
+    <td class="tbOkSepCell" align="left"><b>14.03.2021 17:21:42</b></td>
+    <td class="rtbOkSepCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskD&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683&amp;Sub=1259427">Download</a></div></div></td>
+   </tr>
+   <tr>
+    <td class="ltCell" align="left"><b>Stav odevzdání:</b></td>
+    <td class="tCell" align="left">Ohodnoceno</td>
+
+
+
+    <td class="rtbCell" rowspan="2">&nbsp;</td>
+
+
+   </tr>
+
+   <tr>
+    <td class="lbCell" align="left"><b>Hodnocení:</b></td>
+    <td class="bCell" align="left">33.0000</td>
+   </tr>   <tr>
+    <td class="lrtbCell" colspan="3" align="left"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.978 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.445 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.122 s (limit: 19.555 s)</li><li>CPU time: 0.408 s (limit: 19.554 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.426 s (limit: 19.433 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.507 s (limit: 19.007 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.210 s (limit: 18.500 s)</li><li>CPU time: 0.812 s (limit: 18.212 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha lodi': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.291 s (limit: 18.290 s)</li><li>CPU time: 1.067 s (limit: 17.400 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha zakazni': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.297 s (limit: 17.999 s)</li><li>CPU time: 1.206 s (limit: 16.333 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 1.619 s (limit: 17.702 s)</li><li>CPU time: 3.260 s (limit: 15.127 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomale lode)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 3.228 s (limit: 15.000 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Busy waiting test (pomali zakaznici)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 4.620 s (limit: 11.772 s)</li><li>Úspěch v nepovinném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Rozlozeni zateze': Neúspěch<ul><li>Dosaženo: 0.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.657 s (limit: 10.000 s)</li><li>Neúspěch v bonusovém testu, hodnocení: Bonus nebude udělen</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li></ul></li>
+<li>Celkové hodnocení: 100.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00)</li></ul></li><li>Celkové procentní hodnocení: 100.00 %</li><li>Bonus za včasné odevzdání: 3.00</li><li>Celkem bodů: 1.00 * ( 30.00 + 3.00 ) = 33.00</li></ul></td>
+   </tr> <tr>
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>9</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>105</b></td>
+     <td class="ar"><span class="textOk">11.67 ± 8.77</span></td>
+     <td class="ar"><span class="textOk">30</span></td>
+     <td><tt>CCargoPlanner::SaleWorker</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>29</b></td>
+     <td class="ar"><span class="textOk">3.22 ± 2.25</span></td>
+     <td class="ar"><span class="textOk">7</span></td>
+     <td><tt>CCargoPlanner::LoadWorker</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>   </tbody></table>
+  </div>
+ </div> <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+    <colgroup><col width="200">
+    <col>
+    <col width="130">
+
+   </colgroup><tbody><tr>
+    <td class="ltbFailSepCell" align="left"><b>2</b></td>
+    <td class="tbFailSepCell" align="left"><b>14.03.2021 17:08:34</b></td>
+    <td class="rtbFailSepCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskD&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683&amp;Sub=1259411">Download</a></div></div></td>
+   </tr>
+   <tr>
+    <td class="ltCell" align="left"><b>Stav odevzdání:</b></td>
+    <td class="tCell" align="left">Ohodnoceno</td>
+
+
+
+    <td class="rtbCell" rowspan="2">&nbsp;</td>
+
+
+   </tr>
+
+   <tr>
+    <td class="lbCell" align="left"><b>Hodnocení:</b></td>
+    <td class="bCell" align="left">0.0000</td>
+   </tr>   <tr>
+    <td class="lrtbCell" colspan="3" align="left"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.144 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.373 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.271 s (limit: 19.627 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.423 s (limit: 19.356 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.481 s (limit: 18.933 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.805 s (limit: 18.452 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha lodi': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.803 s (limit: 17.647 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha zakazni': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.678 s (limit: 16.844 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Neúspěch<ul><li>Dosaženo: 0.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 2.073 s (limit: 16.166 s)</li><li>Neúspěch v závazném testu, hodnocení: 0.00 %</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li></ul></li>
+<li>Celkové hodnocení: 0.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 0.00)</li></ul></li><li>Celkové procentní hodnocení: 0.00 %</li><li>Bonus za včasné odevzdání: 3.00</li><li>Celkem bodů: 0.00 * ( 30.00 + 3.00 ) = 0.00</li></ul></td>
+   </tr> <tr>
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>9</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>105</b></td>
+     <td class="ar"><span class="textOk">11.67 ± 8.64</span></td>
+     <td class="ar"><span class="textOk">30</span></td>
+     <td><tt>CCargoPlanner::SaleWorker</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>29</b></td>
+     <td class="ar"><span class="textOk">3.22 ± 2.25</span></td>
+     <td class="ar"><span class="textOk">7</span></td>
+     <td><tt>CCargoPlanner::LoadWorker</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>   </tbody></table>
+  </div>
+ </div> <br>
+ <div class="topLayout">
+  <div class="outBox">
+   <table width="100%" border="0" cellspacing="0" cellpadding="2" id="maintable">
+    <colgroup><col width="200">
+    <col>
+    <col width="130">
+
+   </colgroup><tbody><tr>
+    <td class="ltbFailSepCell" align="left"><b>1</b></td>
+    <td class="tbFailSepCell" align="left"><b>14.03.2021 17:05:42</b></td>
+    <td class="rtbFailSepCell" align="center"><div class="but1 w120"><div class="but2"><a class="butLink" href="https://progtest.fit.cvut.cz/index.php?X=TaskD&amp;Cou=323&amp;Tgr=2049&amp;Tsk=1683&amp;Sub=1259407">Download</a></div></div></td>
+   </tr>
+   <tr>
+    <td class="ltCell" align="left"><b>Stav odevzdání:</b></td>
+    <td class="tCell" align="left">Ohodnoceno</td>
+
+
+
+    <td class="rtbCell" rowspan="2">&nbsp;</td>
+
+
+   </tr>
+
+   <tr>
+    <td class="lbCell" align="left"><b>Hodnocení:</b></td>
+    <td class="bCell" align="left">0.0000</td>
+   </tr>   <tr>
+    <td class="lrtbCell" colspan="3" align="left"><ul><li><b>Hodnotitel: automat</b><ul><li>Program zkompilován</li><li>Test 'Test algoritmu (sekvencni)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 1.180 s (limit: 10.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.546 s (limit: 20.000 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=n, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.513 s (limit: 19.454 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=1, C=1)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.464 s (limit: 18.941 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=1, W=1, C=n)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.377 s (limit: 18.477 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni test (S=n, W=m, C=k)': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.783 s (limit: 18.100 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha lodi': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.872 s (limit: 17.317 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Zakladni (S=n, W=m, C=k), prubezna obsluha zakazni': Úspěch<ul><li>Dosaženo: 100.00 %, požadováno: 100.00 %</li><li>Celková doba běhu: 0.834 s (limit: 16.445 s)</li><li>Úspěch v závazném testu, hodnocení: 100.00 %</li></ul></li>
+<li>Test 'Test zrychleni vypoctu': Neúspěch<ul><li>Dosaženo: 0.00 %, požadováno: 50.00 %</li><li>Celková doba běhu: 2.379 s (limit: 15.611 s)</li><li>Neúspěch v závazném testu, hodnocení: 0.00 %</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li><li>Nesprávný výstup</li></ul></li>
+<li>Celkové hodnocení: 0.00 % (= 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 1.00 * 0.00)</li></ul></li><li>Celkové procentní hodnocení: 0.00 %</li><li>Bonus za včasné odevzdání: 3.00</li><li>Celkem bodů: 0.00 * ( 30.00 + 3.00 ) = 0.00</li></ul></td>
+   </tr> <tr>
+  <td class="ltbCell" align="left"><b>SW metriky:</b></td>
+  <td class="rtbCell" colspan="2" align="left">
+   <table border="0" cellpadding="2">
+    <tbody><tr>
+     <td>&nbsp;</td>
+     <td class="ac">Celkem</td>
+     <td class="ac">Průměr</td>
+     <td class="ac">Maximum</td>
+     <td>Jméno funkce</td>
+    </tr>
+    <tr>
+     <td>Funkce:</td>
+     <td class="ar"><b>9</b></td>
+     <td class="ar">--</td>
+     <td class="ar">--</td>
+     <td>--</td>
+    </tr>
+    <tr>
+     <td>Řádek kódu:</td>
+     <td class="ar"><b>105</b></td>
+     <td class="ar"><span class="textOk">11.67 ± 8.64</span></td>
+     <td class="ar"><span class="textOk">30</span></td>
+     <td><tt>CCargoPlanner::SaleWorker</tt></td>
+    </tr>
+    <tr>
+     <td>Cyklomatická složitost:</td>
+     <td class="ar"><b>29</b></td>
+     <td class="ar"><span class="textOk">3.22 ± 2.25</span></td>
+     <td class="ar"><span class="textOk">7</span></td>
+     <td><tt>CCargoPlanner::LoadWorker</tt></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>   </tbody></table>
+  </div>
+ </div>
+  </center>
+ </form>
+
+
+
+
+
+
+
+
+<script language="javascript" type="text/javascript">
+<!--
+
+var deadLine = new Date ( 1617659999 * 1000 );
+
+function CBpressed ( num )
+ {
+   var pre, cb;
+
+   cb = MM_findObj ( "cb_" + num );
+   pre = MM_findObj ( "pre_" + num );
+   if ( cb != null && pre != null )
+    {
+      pre . style . display = cb . checked ? "block" : "none";
+    }
+ }
+
+function unlockAdvice ( url )
+ {
+   if ( confirm ( 'Máte k dispozici pouze omezený počet nápověd. Navíc, použití nápovědy může snížit bodové hodnocení. Opravdu chcete zpřístupnit tuto nápovědu?' ) )
+    this . location = url;
+ }
+
+function setCountdown ( )
+ {
+   var d = new Date ();
+   var x = ( deadLine . getTime () - d . getTime () );
+   var tgt = document . getElementById ( "countdown" );
+
+   if ( x > 0 )
+    {
+      var s = Math . floor ( x / 1000 );
+      var ms = (x % 1000) + "";
+
+      while ( ms . length  < 3 ) ms = "0" + ms;
+
+      tgt . innerHTML = s + "." + ms + " sec";
+
+      window . setTimeout ( setCountdown, 117 );
+    }
+   else
+    {
+      tgt . innerHTML = '&nbsp;';
+    }
+ }
+
+function showRefSolution ( )
+ {
+   var t = document . getElementById ( "reftable" );
+   var x = document . getElementsByName ( "SHOW_REF" )[0];
+
+   if ( ! x ) return;
+   var r1 = t . rows[1], r2 = t . rows[2];
+
+   if ( x . checked )
+    {
+      r1 . style . display = "";
+      if ( r2 ) r2 . style . display = "";
+    }
+   else
+    {
+      r1 . style . display = "none";
+      if ( r2 ) r2 . style . display = "none";
+    }
+ }
+
+
+setCountdown ();
+showRefSolution ();
+
+// -->
+</script>
+
+
+
+
+
+ 
+
+<!-- Template run time: 0.1000452041626 sec -->
+</body></html>

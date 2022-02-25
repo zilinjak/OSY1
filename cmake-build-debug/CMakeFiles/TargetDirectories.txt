@@ -1,0 +1,3 @@
+C:/Users/zilin/School/BI-OSY/OSY1/cmake-build-debug/CMakeFiles/OSY1.dir
+C:/Users/zilin/School/BI-OSY/OSY1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/zilin/School/BI-OSY/OSY1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
